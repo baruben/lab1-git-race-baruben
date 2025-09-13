@@ -17,6 +17,14 @@ class HelloControllerUnitTests {
     }
     
     @Test
+    fun `greet returns expected values for different hours`() {
+        assertThat(greet(4)).isEqualTo("Good Night")
+        assertThat(greet(8)).isEqualTo("Good Morning")
+        assertThat(greet(14)).isEqualTo("Good Afternoon")
+        assertThat(greet(22)).isEqualTo("Good Night")
+    }
+
+    @Test
     fun `should return welcome view with default message`() {
         val view = controller.welcome(model, "")
         
@@ -30,10 +38,11 @@ class HelloControllerUnitTests {
         val view = controller.welcome(model, "Developer")
         
         assertThat(view).isEqualTo("welcome")
-        assertThat(model.getAttribute("message")).isEqualTo("Hello, Developer!")
+        val message = model.getAttribute("message") as String
+        assertThat(message).matches("^(Good Morning|Good Afternoon|Good Night), Developer!$")
         assertThat(model.getAttribute("name")).isEqualTo("Developer")
     }
-    
+
     @Test
     fun `should return API response with timestamp`() {
         val apiController = HelloApiController()
@@ -41,7 +50,7 @@ class HelloControllerUnitTests {
         
         assertThat(response).containsKey("message")
         assertThat(response).containsKey("timestamp")
-        assertThat(response["message"]).isEqualTo("Hello, Test!")
+        assertThat(response["message"]).matches("^(Good Morning|Good Afternoon|Good Night), Test!$")
         assertThat(response["timestamp"]).isNotNull()
     }
 }

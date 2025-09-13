@@ -34,7 +34,10 @@ class IntegrationTest {
         val response = restTemplate.getForEntity("http://localhost:$port?name=Developer", String::class.java)
         
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(response.body).contains("Hello, Developer!")
+        
+        val greetings = listOf("Good Morning", "Good Afternoon", "Good Night")
+        assertThat(greetings.any { response.body!!.contains(it) }).isTrue()
+        assertThat(response.body).contains("Developer")
     }
 
     @Test
@@ -43,7 +46,7 @@ class IntegrationTest {
         
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(response.headers.contentType).isEqualTo(MediaType.APPLICATION_JSON)
-        assertThat(response.body).contains("Hello, Test!")
+        assertThat(response.body).matches(".*(Good Morning|Good Afternoon|Good Night), Test!.*")
         assertThat(response.body).contains("timestamp")
     }
 

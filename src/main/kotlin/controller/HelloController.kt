@@ -8,6 +8,17 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
+import java.time.LocalTime
+
+fun greet(hour: Int): String {
+    val greeting = when (hour) {
+        in 6..12 -> "Good Morning"
+        in 13..20 -> "Good Afternoon"
+        else -> "Good Night"
+    }
+    return greeting
+}
+
 @Controller
 class HelloController(
     @param:Value("\${app.message:Hello World}") 
@@ -19,7 +30,8 @@ class HelloController(
         model: Model,
         @RequestParam(defaultValue = "") name: String
     ): String {
-        val greeting = if (name.isNotBlank()) "Hello, $name!" else message
+        val hour = LocalTime.now().hour
+        val greeting = if (name.isNotBlank()) "${greet(hour)}, $name!" else message
         model.addAttribute("message", greeting)
         model.addAttribute("name", name)
         return "welcome"
@@ -31,9 +43,11 @@ class HelloApiController {
     
     @GetMapping("/api/hello", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun helloApi(@RequestParam(defaultValue = "World") name: String): Map<String, String> {
+        val hour = LocalTime.now().hour
         return mapOf(
-            "message" to "Hello, $name!",
-            "timestamp" to java.time.Instant.now().toString()
+            "message" to "${greet(hour)}, $name!",
+            "timestamp" to LocalTime.now().toString()
+            // "timestamp" to java.time.Instant.now().toString()
         )
     }
 }

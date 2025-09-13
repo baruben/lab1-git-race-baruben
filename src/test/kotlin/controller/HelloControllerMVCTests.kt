@@ -1,6 +1,7 @@
 package es.unizar.webeng.hello.controller
 
 import org.hamcrest.CoreMatchers.*
+import org.hamcrest.Matchers.matchesPattern
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -35,7 +36,8 @@ class HelloControllerMVCTests {
             .andDo(print())
             .andExpect(status().isOk)
             .andExpect(view().name("welcome"))
-            .andExpect(model().attribute("message", equalTo("Hello, Developer!")))
+            .andExpect(model().attribute("message", 
+                matchesPattern("^(Good Morning|Good Afternoon|Good Night), Developer!$")))
             .andExpect(model().attribute("name", equalTo("Developer")))
     }
     
@@ -45,7 +47,8 @@ class HelloControllerMVCTests {
             .andDo(print())
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.message", equalTo("Hello, Test!")))
+            .andExpect(jsonPath("$.message",
+                matchesPattern("^(Good Morning|Good Afternoon|Good Night), Test!$")))
             .andExpect(jsonPath("$.timestamp").exists())
     }
 }
