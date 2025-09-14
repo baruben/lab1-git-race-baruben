@@ -13,9 +13,11 @@ class UserService(private val db: UserRepository) {
 
     @PostConstruct
     fun initInvitado() {
-        guest = db.findByUserType(UserType.GUEST) ?: db.save(
+        guest = db.findUserByUserType(UserType.GUEST) ?: db.save(
             User(username = "", mail = "", password = "", 
                 userType = UserType.GUEST)
             )
     }
+
+    fun findUserByUsername(username: String): User? = db.findUserByUsername(username)
 }

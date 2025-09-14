@@ -26,6 +26,74 @@
     min-height: 200px;
 }
 
+/* Tarjeta del login */
+.login-card {
+    max-width: 400px;
+    width: 100%;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
 
+/* Formulario */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
 
+/* Label + inputs */
+.form-group-custom {
+    display: flex;
+    flex-direction: column;
+}
 
+.form-group-custom label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.form-control-custom {
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+/* Botón login */
+.btn-login {
+    background: #3f51b5;
+    color: #fff;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.btn-login:hover {
+    background: #32408f;
+}
+
+/* Estilo del * obligatorio */
+.required {
+    color: red;
+}
+
+/* Estilo de mensaje crear cuenta */
+.login-card .text-center p {
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.login-card .text-center a {
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.login-card .text-center a:hover {
+    text-decoration: underline;
+}
