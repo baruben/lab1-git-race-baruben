@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin)
     alias(libs.plugins.kotlin.spring)
     alias(libs.plugins.spring.boot)
+    alias(libs.plugins.kotlin.jpa)
 }
 
 group = "es.unizar.webeng"
@@ -27,6 +28,9 @@ dependencies {
     implementation(libs.bootstrap)
     implementation(libs.jackson.module.kotlin)
     testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.mockito.kotlin)
+    implementation(libs.spring.boot.starter.data.jpa)
+    runtimeOnly(libs.h2)
 }
 
 tasks.withType<Test> {

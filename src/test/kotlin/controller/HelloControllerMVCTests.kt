@@ -1,5 +1,7 @@
 package es.unizar.webeng.hello.controller
 
+import es.unizar.webeng.hello.data.*
+import es.unizar.webeng.hello.service.*
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.Matchers.matchesPattern
 import org.junit.jupiter.api.Test
@@ -11,6 +13,9 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import org.springframework.boot.test.mock.mockito.MockBean
+import org.mockito.kotlin.*
+import org.junit.jupiter.api.BeforeEach
 
 @WebMvcTest(HelloController::class, HelloApiController::class)
 class HelloControllerMVCTests {
@@ -19,6 +24,27 @@ class HelloControllerMVCTests {
 
     @Autowired
     private lateinit var mockMvc: MockMvc
+
+    @MockBean
+    private lateinit var greetingServiceMock: GreetingService
+
+    @MockBean
+    private lateinit var userServiceMock: UserService
+
+    @BeforeEach
+    fun setup() {
+        whenever(userServiceMock.guest).thenReturn(
+            User(username = "", mail = "", password = "", userType = UserType.GUEST)
+        )
+
+        whenever(greetingServiceMock.createGreeting(any(), any(), any())).thenAnswer { invocation ->
+            val name = invocation.getArgument<String>(0)
+            val requestType = invocation.getArgument<RequestType>(1)
+            val user = invocation.getArgument<User>(2)
+
+            Greeting(name = name, requestType = requestType, user = user)
+        }
+    }
 
     @Test
     fun `should return home page with default message`() {

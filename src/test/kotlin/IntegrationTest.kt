@@ -44,6 +44,10 @@ class IntegrationTest {
     fun `should return API response with timestamp`() {
         val response = restTemplate.getForEntity("http://localhost:$port/api/hello?name=Test", String::class.java)
         
+        println("HTTP status: ${response.statusCode}")
+        println("Content-Type: ${response.headers.contentType}")
+        println("Body: ${response.body}")
+
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(response.headers.contentType).isEqualTo(MediaType.APPLICATION_JSON)
         assertThat(response.body).matches(".*(Good Morning|Good Afternoon|Good Night), Test!.*")

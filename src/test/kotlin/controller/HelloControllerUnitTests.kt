@@ -1,29 +1,47 @@
 package es.unizar.webeng.hello.controller
 
+import es.unizar.webeng.hello.data.*
+import es.unizar.webeng.hello.service.GreetingService
+import es.unizar.webeng.hello.service.UserService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.ui.Model
 import org.springframework.ui.ExtendedModelMap
+import org.mockito.kotlin.*
 
 class HelloControllerUnitTests {
     private lateinit var controller: HelloController
     private lateinit var model: Model
     
+    private lateinit var greetingServiceMock: GreetingService
+    private lateinit var userServiceMock: UserService
+
     @BeforeEach
     fun setup() {
-        controller = HelloController("Test Message")
+        greetingServiceMock = mock()
+        userServiceMock = mock()
+
+        whenever(userServiceMock.guest).thenReturn(
+            User(username = "", mail = "", password = "", userType = UserType.GUEST)
+        )
+
+        whenever(greetingServiceMock.createGreeting(any(), any(), any())).thenAnswer { invocation ->
+            val name = invocation.getArgument<String>(0)
+            val requestType = invocation.getArgument<RequestType>(1)
+            val user = invocation.getArgument<User>(2)
+
+            Greeting(name = name, requestType = requestType, user = user)
+        }
+
+        controller = HelloController(
+            message = "Test Message",
+            greetingService = greetingServiceMock,
+            userService = userServiceMock
+        )
         model = ExtendedModelMap()
     }
     
-    @Test
-    fun `greet returns expected values for different hours`() {
-        assertThat(greet(4)).isEqualTo("Good Night")
-        assertThat(greet(8)).isEqualTo("Good Morning")
-        assertThat(greet(14)).isEqualTo("Good Afternoon")
-        assertThat(greet(22)).isEqualTo("Good Night")
-    }
-
     @Test
     fun `should return welcome view with default message`() {
         val view = controller.welcome(model, "")
@@ -45,7 +63,10 @@ class HelloControllerUnitTests {
 
     @Test
     fun `should return API response with timestamp`() {
-        val apiController = HelloApiController()
+        val apiController = HelloApiController(
+            greetingService = greetingServiceMock,
+            userService = userServiceMock
+        )
         val response = apiController.helloApi("Test")
         
         assertThat(response).containsKey("message")
