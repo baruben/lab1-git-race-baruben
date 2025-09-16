@@ -33,6 +33,7 @@ dependencies {
     implementation(libs.spring.boot.starter.security)
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
     implementation("com.github.vladimir-bukhtoyarov:bucket4j-core:8.0.1")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13")
     runtimeOnly(libs.h2)
 }
 

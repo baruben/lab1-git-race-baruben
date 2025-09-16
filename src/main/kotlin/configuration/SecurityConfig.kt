@@ -55,7 +55,8 @@ class SecurityConfig(
         http
             .authorizeHttpRequests {
                 it.requestMatchers("/", "/signup", "/login", "/api/whoami", "/api/hello", "/actuator/health",
-                    "/css/**", "/js/**", "/images/**", "/assets/**", "/webjars/**", "/vendor/**")
+                    "/css/**", "/js/**", "/images/**", "/assets/**", "/webjars/**", "/vendor/**", 
+                    "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**")
                     .permitAll()
                 it.anyRequest().hasRole("USER")
             }

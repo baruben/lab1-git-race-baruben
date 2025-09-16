@@ -4,6 +4,7 @@ import es.unizar.webeng.hello.entity.*
 
 import es.unizar.webeng.hello.enum.*
 import es.unizar.webeng.hello.service.*
+import es.unizar.webeng.hello.response.*
 import es.unizar.webeng.hello.configuration.RateLimitConfig
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.Matchers.matchesPattern
@@ -80,7 +81,7 @@ class HelloControllerMVCTests {
     fun `should return API response as JSON`() {
         mockMvc.perform(get("/api/hello").param("name", "Test"))
             .andDo(print())
-            .andExpect(status().isOk)
+            .andExpect(status().isCreated)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.message",
                 matchesPattern("^(Good Morning|Good Afternoon|Good Night), Test!$")))
@@ -103,7 +104,7 @@ class RateLimiterMvcTest() {
             mockMvc.perform(MockMvcRequestBuilders.get(url).with { request ->
                 request.remoteAddr = "127.0.0.1"
                 request
-            }).andExpect(MockMvcResultMatchers.status().isOk)
+            }).andExpect(MockMvcResultMatchers.status().isCreated)
         }
 
         mockMvc.perform(MockMvcRequestBuilders.get(url).with { request ->

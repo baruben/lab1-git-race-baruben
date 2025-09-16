@@ -2,6 +2,7 @@ package es.unizar.webeng.hello.controller
 
 import es.unizar.webeng.hello.entity.*
 import es.unizar.webeng.hello.enum.*
+import es.unizar.webeng.hello.response.*
 import es.unizar.webeng.hello.service.GreetingService
 import es.unizar.webeng.hello.service.UserService
 import org.assertj.core.api.Assertions.assertThat
@@ -70,9 +71,8 @@ class HelloControllerUnitTests {
         )
         val response = apiController.helloApi("Test")
         
-        assertThat(response).containsKey("message")
-        assertThat(response).containsKey("timestamp")
-        assertThat(response["message"]).matches("^(Good Morning|Good Afternoon|Good Night), Test!$")
-        assertThat(response["timestamp"]).isNotNull()
+        assertThat(response).isInstanceOf(GreetingResponse::class.java)
+        assertThat(response.message).matches("^(Good Morning|Good Afternoon|Good Night), Test!$")
+        assertThat(response.timestamp).isNotNull()
     }
 }

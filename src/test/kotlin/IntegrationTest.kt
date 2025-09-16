@@ -48,7 +48,7 @@ class IntegrationTest {
         println("Content-Type: ${response.headers.contentType}")
         println("Body: ${response.body}")
 
-        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(response.statusCode).isEqualTo(HttpStatus.CREATED)
         assertThat(response.headers.contentType).isEqualTo(MediaType.APPLICATION_JSON)
         assertThat(response.body).matches(".*(Good Morning|Good Afternoon|Good Night), Test!.*")
         assertThat(response.body).contains("timestamp")

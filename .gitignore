@@ -6,7 +6,7 @@ build/
 bin/
 .vscode/
 .DS_Store
-data
+data/
 
 # Ignore Gradle GUI config
 gradle-app.setting
