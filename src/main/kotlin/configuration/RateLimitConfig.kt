@@ -31,10 +31,6 @@ class RateLimitConfig {
         }
     }
 
-    fun clearBuckets() {
-        cache.clear()
-    }
-
     @Bean
     fun rateLimiterFilter(): FilterRegistrationBean<Filter> {
         val registrationBean = FilterRegistrationBean<Filter>()

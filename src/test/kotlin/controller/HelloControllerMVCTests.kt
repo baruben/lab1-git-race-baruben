@@ -102,13 +102,13 @@ class RateLimiterMvcTest() {
 
         repeat(101) {
             mockMvc.perform(MockMvcRequestBuilders.get(url).with { request ->
-                request.remoteAddr = "127.0.0.1"
+                request.remoteAddr = "127.0.0.2"
                 request
             }).andExpect(MockMvcResultMatchers.status().isCreated)
         }
 
         mockMvc.perform(MockMvcRequestBuilders.get(url).with { request ->
-            request.remoteAddr = "127.0.0.1"
+            request.remoteAddr = "127.0.0.2"
             request
         }).andExpect(MockMvcResultMatchers.status().isTooManyRequests)
     }
