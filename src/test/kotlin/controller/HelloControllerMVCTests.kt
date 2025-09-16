@@ -36,7 +36,7 @@ class HelloControllerMVCTests {
 
     @BeforeEach
     fun setup() {
-        whenever(userServiceMock.guest).thenReturn(
+        whenever(userServiceMock.getSessionUser()).thenReturn(
             User(username = "", password = "", role = Role.GUEST)
         )
 

@@ -7,15 +7,17 @@ import es.unizar.webeng.hello.repository.GreetingRepository
 import org.springframework.stereotype.Service
 
 @Service
-class GreetingService(private val db: GreetingRepository) {
+class GreetingService(private val greetingRepository: GreetingRepository) {
     fun create(name: String, requestType: RequestType, user: User): Greeting {
         val greeting = Greeting(
             name = name,
             requestType = requestType,
             user = user
         )
-        return db.save(greeting)
+        return greetingRepository.save(greeting)
     }
 
-    fun listGreetings(): List<Greeting> = db.findAll()
+    fun listGreetings(): List<Greeting> = greetingRepository.findAll()
+
+    fun findAllByUserOrderByTimestampDesc(user: User): List<Greeting> = greetingRepository.findAllByUserOrderByTimestampDesc(user)
 }

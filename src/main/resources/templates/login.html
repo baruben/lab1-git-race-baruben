@@ -27,7 +27,7 @@
 
     <main class="container flex-grow-1 d-flex flex-column justify-content-center align-items-center">
         <!-- Logout message -->
-        <div th:if="${param.logout}" class="alert alert-info">
+        <div th:if="${param.logout}" class="alert alert-info mb-5">
             You have been logged out successfully.
         </div>
 
@@ -61,8 +61,8 @@
             </div>
 
             <!-- Error message (when Spring Security redirects with ?error) -->
-            <div th:if="${param.error}" class="alert alert-danger">
-                Invalid username or password.
+            <div th:if="${param.error}" class="alert alert-danger py-2 mt-4 text-center">
+                Invalid username or password
             </div>
         </div>
     </main>

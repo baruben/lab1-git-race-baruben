@@ -23,7 +23,7 @@ class HelloControllerUnitTests {
         greetingServiceMock = mock()
         userServiceMock = mock()
 
-        whenever(userServiceMock.guest).thenReturn(
+        whenever(userServiceMock.getSessionUser()).thenReturn(
             User(username = "", password = "", role = Role.GUEST)
         )
 

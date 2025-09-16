@@ -22,25 +22,19 @@ class HelloController(
     private val greetingService: GreetingService,
     private val userService: UserService
 ) {
-    
+
     @GetMapping("/")
     fun welcome(
         model: Model,
         @RequestParam(defaultValue = "") name: String
     ): String {
-        val auth = SecurityContextHolder.getContext().authentication
-
-        val user = if (auth != null && auth.isAuthenticated && auth.principal is SecurityUser) {
-            (auth.principal as SecurityUser).user
-        } else {
-            userService.guest
-        }
+        val user = userService.getSessionUser()
 
         val greetingMessage = if (name.isNotBlank()) {
             val greeting = greetingService.create(
                 name = name,
                 requestType = RequestType.WEB,
-                user = userService.guest
+                user = user
             )
             "${greeting.timeOfDay.message}, $name!"
         } else {
@@ -60,21 +54,22 @@ class HelloApiController(
     
     @GetMapping("/api/hello", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun helloApi(@RequestParam(defaultValue = "World") name: String): Map<String, String> {
+        val user = userService.getSessionUser()
+
         val greeting = greetingService.create(
             name = name,
             requestType = RequestType.API,
-            user = userService.guest
+            user = user
         )
 
         return mapOf(
             "message" to "${greeting.timeOfDay.message}, $name!",
             "timestamp" to greeting.timestamp.toString()
-            // "timestamp" to java.time.Instant.now().toString()
         )
     }
 
-    @GetMapping("/whoami")
-    fun whoami(auth: Authentication?): String {
+    @GetMapping("/api/whoami")
+    fun whoamiApi(auth: Authentication?): String {
         return if (auth == null) {
             "Not authenticated"
         } else {
@@ -82,4 +77,17 @@ class HelloApiController(
         }
     }
 
+    @GetMapping("/api/history", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun historyApi(): List<Map<String, String>> {
+        val user = userService.getSessionUser()
+        val greetings = greetingService.findAllByUserOrderByTimestampDesc(user)
+
+        return greetings.map { greeting ->
+            mapOf(
+                "message" to "${greeting.timeOfDay.message}, ${greeting.name}!",
+                "from" to greeting.requestType.name,
+                "timestamp" to greeting.timestamp.toString()
+            )
+        }
+    }
 }

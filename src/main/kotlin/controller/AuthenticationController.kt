@@ -40,13 +40,14 @@ class AuthenticationController(
             val authentication: Authentication = authenticationManager.authenticate(authRequest)
             SecurityContextHolder.getContext().authentication = authentication
 
-           rememberMeServices.loginSuccess(request, response, authentication)
+            rememberMeServices.loginSuccess(request, response, authentication)
 
+            response.status = HttpServletResponse.SC_CREATED
             return "redirect:/"
 
         } catch (e: IllegalArgumentException) {
-            model.addAttribute("error", e.message)
-            return "signup"
+            response.status = HttpServletResponse.SC_CONFLICT
+            return "redirect:/signup?error"
         }
     }
 }

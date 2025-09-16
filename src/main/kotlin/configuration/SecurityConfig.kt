@@ -54,7 +54,7 @@ class SecurityConfig(
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .authorizeHttpRequests {
-                it.requestMatchers("/", "/whoami", "/signup", "/login", "/api/hello", "/actuator/health",
+                it.requestMatchers("/", "/signup", "/login", "/api/whoami", "/api/hello", "/actuator/health",
                     "/css/**", "/js/**", "/images/**", "/assets/**", "/webjars/**", "/vendor/**")
                     .permitAll()
                 it.anyRequest().hasRole("USER")
