@@ -1,8 +1,10 @@
 package es.unizar.webeng.hello.controller
 
 import es.unizar.webeng.hello.entity.*
+
 import es.unizar.webeng.hello.enum.*
 import es.unizar.webeng.hello.service.*
+import es.unizar.webeng.hello.configuration.RateLimitConfig
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.Matchers.matchesPattern
 import org.junit.jupiter.api.Test
@@ -18,6 +20,10 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.mockito.kotlin.*
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.web.servlet.request.RequestPostProcessor
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @WebMvcTest(HelloController::class, HelloApiController::class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -82,3 +88,27 @@ class HelloControllerMVCTests {
     }
 }
 
+@SpringBootTest
+@AutoConfigureMockMvc
+class RateLimiterMvcTest() {
+
+    @Autowired
+    lateinit var mockMvc: MockMvc
+
+    @Test
+    fun `rate limiter triggers 429 after limit`() {
+        val url = "/api/hello"
+
+        repeat(101) {
+            mockMvc.perform(MockMvcRequestBuilders.get(url).with { request ->
+                request.remoteAddr = "127.0.0.1"
+                request
+            }).andExpect(MockMvcResultMatchers.status().isOk)
+        }
+
+        mockMvc.perform(MockMvcRequestBuilders.get(url).with { request ->
+            request.remoteAddr = "127.0.0.1"
+            request
+        }).andExpect(MockMvcResultMatchers.status().isTooManyRequests)
+    }
+}
