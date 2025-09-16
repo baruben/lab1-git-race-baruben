@@ -1,8 +1,10 @@
-package es.unizar.webeng.hello.data 
+package es.unizar.webeng.hello.entity 
 
+import es.unizar.webeng.hello.enum.RequestType
+import es.unizar.webeng.hello.enum.TimeOfDay
+import es.unizar.webeng.hello.enum.timestampToTimeOfDay
 import jakarta.persistence.*
 import java.time.OffsetDateTime
-import java.util.UUID
 
 @Entity
 @Table(name = "GREETINGS")
@@ -18,13 +20,9 @@ class Greeting(
 
     val timestamp: OffsetDateTime = OffsetDateTime.now(),
 
-    @Id 
-    val id: UUID = UUID.randomUUID()   
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 0  
 ) {
     val timeOfDay: TimeOfDay
-        get() = when (timestamp.hour) {
-            in 6..11 -> TimeOfDay.MORNING
-            in 12..17 -> TimeOfDay.AFTERNOON
-            else -> TimeOfDay.NIGHT
-        }
+        get() = timestampToTimeOfDay(timestamp)
 }

@@ -27,18 +27,12 @@
 
     <main class="container flex-grow-1 d-flex justify-content-center align-items-start py-4">
         <div class="login-card mt-4">
-            <form action="/signup" method="post" class="login-form">
+            <form th:action="@{/signup}" method="post" class="login-form">
               
                 <!-- Username -->
                 <div class="form-group-custom">
                     <label for="username">Username <span class="required">*</span></label>
                     <input type="text" id="username" name="username" required class="form-control-custom">
-                </div>
-
-                <!-- Email -->
-                <div class="form-group-custom">
-                    <label for="email">Email <span class="required">*</span></label>
-                    <input type="email" id="email" name="email" required class="form-control-custom">
                 </div>
 
                 <!-- Password -->

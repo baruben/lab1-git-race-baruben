@@ -1,6 +1,7 @@
 package es.unizar.webeng.hello.controller
 
-import es.unizar.webeng.hello.data.*
+import es.unizar.webeng.hello.entity.*
+import es.unizar.webeng.hello.enum.*
 import es.unizar.webeng.hello.service.*
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.Matchers.matchesPattern
@@ -16,8 +17,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.mockito.kotlin.*
 import org.junit.jupiter.api.BeforeEach
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 
 @WebMvcTest(HelloController::class, HelloApiController::class)
+@AutoConfigureMockMvc(addFilters = false)
 class HelloControllerMVCTests {
     @Value("\${app.message:Welcome to the Modern Web App!}")
     private lateinit var message: String
@@ -34,10 +37,10 @@ class HelloControllerMVCTests {
     @BeforeEach
     fun setup() {
         whenever(userServiceMock.guest).thenReturn(
-            User(username = "", mail = "", password = "", userType = UserType.GUEST)
+            User(username = "", password = "", role = Role.GUEST)
         )
 
-        whenever(greetingServiceMock.createGreeting(any(), any(), any())).thenAnswer { invocation ->
+        whenever(greetingServiceMock.create(any(), any(), any())).thenAnswer { invocation ->
             val name = invocation.getArgument<String>(0)
             val requestType = invocation.getArgument<RequestType>(1)
             val user = invocation.getArgument<User>(2)

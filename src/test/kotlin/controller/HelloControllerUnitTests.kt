@@ -1,6 +1,7 @@
 package es.unizar.webeng.hello.controller
 
-import es.unizar.webeng.hello.data.*
+import es.unizar.webeng.hello.entity.*
+import es.unizar.webeng.hello.enum.*
 import es.unizar.webeng.hello.service.GreetingService
 import es.unizar.webeng.hello.service.UserService
 import org.assertj.core.api.Assertions.assertThat
@@ -23,10 +24,10 @@ class HelloControllerUnitTests {
         userServiceMock = mock()
 
         whenever(userServiceMock.guest).thenReturn(
-            User(username = "", mail = "", password = "", userType = UserType.GUEST)
+            User(username = "", password = "", role = Role.GUEST)
         )
 
-        whenever(greetingServiceMock.createGreeting(any(), any(), any())).thenAnswer { invocation ->
+        whenever(greetingServiceMock.create(any(), any(), any())).thenAnswer { invocation ->
             val name = invocation.getArgument<String>(0)
             val requestType = invocation.getArgument<RequestType>(1)
             val user = invocation.getArgument<User>(2)

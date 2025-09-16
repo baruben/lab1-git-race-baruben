@@ -1,8 +1,7 @@
 package es.unizar.webeng.hello.controller
 
-import es.unizar.webeng.hello.data.Greeting
-import es.unizar.webeng.hello.data.RequestType
-import es.unizar.webeng.hello.data.UserType
+import es.unizar.webeng.hello.entity.Greeting
+import es.unizar.webeng.hello.enum.*
 import es.unizar.webeng.hello.repository.GreetingRepository
 import es.unizar.webeng.hello.service.UserService
 import org.assertj.core.api.Assertions.assertThat
@@ -44,7 +43,7 @@ class HelloControllerDBTests {
 
         assertThat(savedGreeting.requestType).isEqualTo(RequestType.WEB)
         assertThat(savedGreeting.name).isEqualTo("Test")
-        assertThat(savedGreeting.user.userType).isEqualTo(UserType.GUEST)
+        assertThat(savedGreeting.user.role).isEqualTo(Role.GUEST)
         assertThat(savedGreeting.timestamp).isInstanceOf(OffsetDateTime::class.java)
     }
 
@@ -58,7 +57,7 @@ class HelloControllerDBTests {
 
         assertThat(savedGreeting.requestType).isEqualTo(RequestType.API)
         assertThat(savedGreeting.name).isEqualTo("Test")
-        assertThat(savedGreeting.user.userType).isEqualTo(UserType.GUEST)
+        assertThat(savedGreeting.user.role).isEqualTo(Role.GUEST)
         assertThat(savedGreeting.timestamp).isInstanceOf(OffsetDateTime::class.java)
     }
 }

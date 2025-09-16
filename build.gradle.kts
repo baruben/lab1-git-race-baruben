@@ -30,6 +30,8 @@ dependencies {
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.mockito.kotlin)
     implementation(libs.spring.boot.starter.data.jpa)
+    implementation(libs.spring.boot.starter.security)
+    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
     runtimeOnly(libs.h2)
 }
 

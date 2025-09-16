@@ -1,11 +1,10 @@
 package es.unizar.webeng.hello.repository
 
-import es.unizar.webeng.hello.data.User
-import es.unizar.webeng.hello.data.UserType
+import es.unizar.webeng.hello.entity.User
+import es.unizar.webeng.hello.enum.Role
 import org.springframework.data.jpa.repository.JpaRepository
-import java.util.UUID
 
-interface UserRepository : JpaRepository<User, UUID> {
-    fun findUserByUserType(userType: UserType): User?
-    fun findUserByUsername(username: String): User?
+interface UserRepository : JpaRepository<User, Long> {
+    fun findByRole(role: Role): User?
+    fun findByUsername(username: String): User?
 }
