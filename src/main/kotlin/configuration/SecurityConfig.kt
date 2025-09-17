@@ -2,6 +2,7 @@ package es.unizar.webeng.hello.configuration
 
 import es.unizar.webeng.hello.service.SecurityUserService
 import es.unizar.webeng.hello.repository.TokenRepository
+import es.unizar.webeng.hello.filter.RateLimitFilter
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -15,11 +16,13 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
 class SecurityConfig(
     private val securityUserService: SecurityUserService,
     private val tokenRepository: TokenRepository,
+    private val rateLimitFilter: RateLimitFilter,
     @Value("\${security.rememberme.key}") private val rememberMeKey: String
 ) {
 
@@ -73,6 +76,8 @@ class SecurityConfig(
             .rememberMe { rememberMe ->
                 rememberMe.rememberMeServices(customRememberMeServices())
             }
+
+        http.addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter::class.java)
 
         return http.build()
     }

@@ -29,6 +29,7 @@ dependencies {
     implementation(libs.jackson.module.kotlin)
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.mockito.kotlin)
+    testImplementation("org.springframework.security:spring-security-test")
     implementation(libs.spring.boot.starter.data.jpa)
     implementation(libs.spring.boot.starter.security)
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")

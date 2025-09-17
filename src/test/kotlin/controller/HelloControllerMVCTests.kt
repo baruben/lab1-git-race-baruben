@@ -1,11 +1,10 @@
 package es.unizar.webeng.hello.controller
 
 import es.unizar.webeng.hello.entity.*
-
+import es.unizar.webeng.hello.filter.*
 import es.unizar.webeng.hello.enum.*
 import es.unizar.webeng.hello.service.*
 import es.unizar.webeng.hello.response.*
-import es.unizar.webeng.hello.configuration.RateLimitConfig
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.Matchers.matchesPattern
 import org.junit.jupiter.api.Test
@@ -25,6 +24,8 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.request.RequestPostProcessor
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user
+
 
 @WebMvcTest(HelloController::class, HelloApiController::class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -40,6 +41,9 @@ class HelloControllerMVCTests {
 
     @MockBean
     private lateinit var userServiceMock: UserService
+
+    @MockBean
+    private lateinit var rateLimitFilter: RateLimitFilter
 
     @BeforeEach
     fun setup() {
@@ -97,10 +101,10 @@ class RateLimiterMvcTest() {
     lateinit var mockMvc: MockMvc
 
     @Test
-    fun `rate limiter triggers 429 after limit`() {
+    fun `rate limiter triggers 429 for unauthenticated user`() {
         val url = "/api/hello"
 
-        repeat(101) {
+        repeat(50) {
             mockMvc.perform(MockMvcRequestBuilders.get(url).with { request ->
                 request.remoteAddr = "127.0.0.2"
                 request
@@ -111,5 +115,21 @@ class RateLimiterMvcTest() {
             request.remoteAddr = "127.0.0.2"
             request
         }).andExpect(MockMvcResultMatchers.status().isTooManyRequests)
+    }
+
+    @Test
+    fun `rate limiter triggers 429 for authenticated user`() {
+        val url = "/api/hello"
+        val testUser = User(username = "testuser", password = "", role = Role.USER)
+
+        repeat(50) {
+            mockMvc.perform(MockMvcRequestBuilders.get(url)
+                .with(user(testUser.username)) 
+            ).andExpect(MockMvcResultMatchers.status().isCreated)
+        }
+
+        mockMvc.perform(MockMvcRequestBuilders.get(url)
+            .with(user(testUser.username))
+        ).andExpect(MockMvcResultMatchers.status().isTooManyRequests)
     }
 }
