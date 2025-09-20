@@ -1,3 +1,14 @@
 package es.unizar.webeng.hello.enum
 
-enum class Role { GUEST, USER, ADMIN }
+
+/**
+ * Represents roles assigned to a user for access control.
+ */
+enum class Role { 
+    
+    /** Guest role with minimal access */
+    GUEST, 
+    
+    /** Regular user role */
+    USER
+}
