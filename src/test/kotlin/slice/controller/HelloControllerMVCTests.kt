@@ -25,7 +25,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.time.OffsetDateTime
-
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
+import org.springframework.test.context.TestPropertySource
 
 @WebMvcTest(HelloController::class, HelloApiController::class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -95,8 +96,11 @@ class HelloControllerMVCTests {
     }
 }
 
-@SpringBootTest
+
 @AutoConfigureMockMvc
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT,
+    properties = ["spring.h2.console.enabled=false"])
+@TestPropertySource("classpath:application-test.properties")
 class RateLimiterMvcTest() {
 
     @Autowired
@@ -122,7 +126,7 @@ class RateLimiterMvcTest() {
     @Test
     fun `rate limiter triggers 429 for authenticated user`() {
         val url = "/api/hello"
-        val testUser = User(username = "testuser", password = "", role = Role.USER)
+        val testUser = User(username = "testRate", password = "", role = Role.USER)
 
         repeat(50) {
             mockMvc.perform(MockMvcRequestBuilders.get(url)

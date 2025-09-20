@@ -12,6 +12,9 @@ import org.springframework.security.web.authentication.RememberMeServices
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.tags.Tag
 
 @Controller
 class AuthenticationController(
@@ -42,12 +45,36 @@ class AuthenticationController(
 
             rememberMeServices.loginSuccess(request, response, authentication)
 
-            response.status = HttpServletResponse.SC_CREATED
             return "redirect:/"
 
         } catch (e: IllegalArgumentException) {
-            response.status = HttpServletResponse.SC_CONFLICT
             return "redirect:/signup?error"
+        }
+    }
+}
+
+@RestController
+@Tag(
+    name = "Authentication",
+    description = "Endpoints for authentication info."
+)
+class AuthenticationApiController() {
+    @Operation(
+        summary = "Check current authentication info",
+        description = "Returns the authentication type, username, and authorities if the user is authenticated.",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Authentication details string"
+            )
+        ]
+    )
+    @GetMapping("/api/whoami")
+    fun whoamiApi(auth: Authentication?): String {
+        return if (auth == null) {
+            "Not authenticated"
+        } else {
+            "Auth type: ${auth.javaClass.simpleName}, name: ${auth.name}, authorities: ${auth.authorities}"
         }
     }
 }

@@ -16,6 +16,9 @@ class User(
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     val role: Role = Role.USER,
+
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.REMOVE], orphanRemoval = true)
+    val greetings: MutableList<Greeting> = mutableListOf(),
     
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0

@@ -13,8 +13,12 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.server.LocalServerPort
 import java.time.OffsetDateTime
+import org.springframework.test.context.TestPropertySource
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
+@TestPropertySource("classpath:application-test.properties")
 class HelloControllerDBTests {
     @LocalServerPort
     private var port: Int = 0
