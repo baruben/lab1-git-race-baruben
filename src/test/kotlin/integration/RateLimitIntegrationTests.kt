@@ -12,12 +12,16 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user
+import org.springframework.boot.test.web.server.LocalServerPort
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT,
     properties = ["spring.h2.console.enabled=false"])
 @TestPropertySource("classpath:application-test.properties")
 class RateLimiterMvcTest() {
+
+    @LocalServerPort
+    private var port: Int = 0
 
     @Autowired
     lateinit var mockMvc: MockMvc

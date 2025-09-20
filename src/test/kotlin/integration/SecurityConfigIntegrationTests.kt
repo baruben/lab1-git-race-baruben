@@ -23,12 +23,16 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.test.context.TestPropertySource
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
+import org.springframework.boot.test.web.server.LocalServerPort
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT,
     properties = ["spring.h2.console.enabled=false"])
 @AutoConfigureMockMvc
 @TestPropertySource("classpath:application-test.properties")
 class SecurityConfigIntegrationTests {
+
+    @LocalServerPort
+    private var port: Int = 0
 
     @Autowired 
     private lateinit var mockMvc: MockMvc
