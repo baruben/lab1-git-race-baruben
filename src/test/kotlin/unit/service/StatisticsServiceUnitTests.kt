@@ -26,7 +26,8 @@ class StatisticsServiceUnitTests {
         statisticsService = StatisticsService(greetingRepository, limit)
     }
 
-    private fun initStatisticsMock() {
+    @Test
+    fun `should map to StatisticsResponse`() {
         whenever(greetingRepository.count()).thenReturn(10L)
         whenever(greetingRepository.countPerEndpoint()).thenReturn(listOf(Pair(Endpoint.WEB, 4L)))
         whenever(greetingRepository.countPerUserRole()).thenReturn(listOf(Pair(Role.USER, 6L)))
@@ -35,11 +36,6 @@ class StatisticsServiceUnitTests {
         whenever(greetingRepository.countPerHour(PageRequest.of(0, limit))).thenReturn(listOf(Pair(10, 2L)))
         whenever(greetingRepository.countDistinctNames()).thenReturn(7L)
         whenever(greetingRepository.countPerName(PageRequest.of(0, limit))).thenReturn(listOf(Pair("ALICE", 3L)))
-    }
-
-    @Test
-    fun `should map to StatisticsResponse`() {
-        initStatisticsMock()
 
         val response = statisticsService.getStatistics()
 
@@ -53,7 +49,10 @@ class StatisticsServiceUnitTests {
         assertThat(response.topNames).containsExactly(TopNames("ALICE", 3L))
     }
 
-    private fun initMyStatisticsMock(user: User) {
+    @Test
+    fun `should map to MyStatisticsResponse`() {
+        val user = User(username = "test", password = "password", role = Role.USER)
+        
         whenever(greetingRepository.countByUser(user)).thenReturn(5L)
         whenever(greetingRepository.countPerEndpointByUser(user)).thenReturn(listOf(Pair(Endpoint.API, 3L)))
         whenever(greetingRepository.countPerTimeOfDayByUser(user)).thenReturn(listOf(Pair("AFTERNOON", 2L)))
@@ -61,12 +60,6 @@ class StatisticsServiceUnitTests {
         whenever(greetingRepository.countPerHourByUser(user, PageRequest.of(0, limit))).thenReturn(listOf(Pair(14, 1L)))
         whenever(greetingRepository.countPerNameByUser(user, PageRequest.of(0, limit))).thenReturn(listOf(Pair("BOB", 2L)))
         whenever(greetingRepository.countDistinctNamesByUser(user)).thenReturn(2L)
-    }
-
-    @Test
-    fun `should map to MyStatisticsResponse`() {
-        val user = User(username = "test", password = "password", role = Role.USER)
-        initMyStatisticsMock(user)
 
         val response = statisticsService.getMyStatistics(user)
 

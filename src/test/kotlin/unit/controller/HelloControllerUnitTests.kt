@@ -21,25 +21,21 @@ class HelloControllerUnitTests {
     private lateinit var apiController: HelloApiController
     private lateinit var model: Model
     
-    private lateinit var greetingServiceMock: GreetingService
-    private lateinit var userServiceMock: UserService
+    private lateinit var greetingService: GreetingService
+    private lateinit var userService: UserService
 
     @BeforeEach
     fun setup() {
-        initMocks()
-        initControllers()
-        initModel()
-    }
+        model = ExtendedModelMap()
 
-    private fun initMocks() {
-        greetingServiceMock = mock()
-        userServiceMock = mock()
+        greetingService = mock()
+        userService = mock()
         
-        whenever(userServiceMock.getSessionUser()).thenReturn(
+        whenever(userService.getSessionUser()).thenReturn(
             User(username = "test", password = "password", role = Role.USER)
         )
 
-        whenever(greetingServiceMock.create(any(), any(), any())).thenAnswer { invocation ->
+        whenever(greetingService.create(any(), any(), any())).thenAnswer { invocation ->
             val name = invocation.getArgument<String>(0)
             val endpoint = invocation.getArgument<Endpoint>(1)
             val user = invocation.getArgument<User>(2)
@@ -47,28 +43,16 @@ class HelloControllerUnitTests {
             Greeting(name = name, endpoint = endpoint, user = user)
         }
 
-        val user = userServiceMock.getSessionUser()
-        val greeting1 = Greeting(name = "Alice", endpoint = Endpoint.API, user = user)
-        val greeting2 = Greeting(name = "Bob", endpoint = Endpoint.WEB, user = user)
-        val greetings = listOf(greeting1, greeting2)
-
-        whenever(greetingServiceMock.findAllByUserOrderByTimestampDesc(user)).thenReturn(greetings)
-    }
-    
-    private fun initControllers() {
         controller = HelloController(
             message = "Test Message",
-            greetingService = greetingServiceMock,
-            userService = userServiceMock
+            greetingService = greetingService,
+            userService = userService
         )
-        apiController = HelloApiController(
-            greetingService = greetingServiceMock,
-            userService = userServiceMock
-        )
-    }
 
-    private fun initModel() {
-        model = ExtendedModelMap()
+        apiController = HelloApiController(
+            greetingService = greetingService,
+            userService = userService
+        )
     }
 
     @Test
@@ -91,16 +75,33 @@ class HelloControllerUnitTests {
     }
 
     @Test
-    fun `should return API response with timestamp`() {
-        val apiController = HelloApiController(
-            greetingService = greetingServiceMock,
-            userService = userServiceMock
-        )
+    fun `should return hello API response with timestamp`() {
         val response = apiController.helloApi("Test")
         val timeOfDay = timestampToTimeOfDay(OffsetDateTime.now())
         
         assertThat(response).isInstanceOf(GreetingResponse::class.java)
         assertThat(response.message).isEqualTo("${timeOfDay.message}, Test!")
         assertThat(response.timestamp).isNotNull()
+    }
+
+    @Test
+    fun `should return history API response with greeting history`() {
+        val user = userService.getSessionUser()
+        val greeting1 = Greeting(name = "Alice", endpoint = Endpoint.API, user = user)
+        val greeting2 = Greeting(name = "Bob", endpoint = Endpoint.WEB, user = user)
+        val greetings = listOf(greeting1, greeting2)
+
+        whenever(greetingService.findAllByUserOrderByTimestampDesc(user)).thenReturn(greetings)
+
+        val response = apiController.historyApi()
+
+        assertThat(response).hasSize(2)
+        assertThat(response[0].message).isEqualTo("${greeting1.timeOfDay.message}, ${greeting1.name}!")
+        assertThat(response[0].endpoint).isEqualTo(greeting1.endpoint.name)
+        assertThat(response[0].timestamp).isEqualTo(greeting1.timestamp.toString())
+
+        assertThat(response[1].message).isEqualTo("${greeting2.timeOfDay.message}, ${greeting2.name}!")
+        assertThat(response[1].endpoint).isEqualTo(greeting2.endpoint.name)
+        assertThat(response[1].timestamp).isEqualTo(greeting2.timestamp.toString())
     }
 }
