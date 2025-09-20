@@ -1,6 +1,6 @@
 package es.unizar.webeng.hello.controller
 
-import es.unizar.webeng.hello.enum.RequestType
+import es.unizar.webeng.hello.enum.Endpoint
 import es.unizar.webeng.hello.entity.SecurityUser
 import es.unizar.webeng.hello.service.GreetingService
 import es.unizar.webeng.hello.service.UserService
@@ -43,7 +43,7 @@ class HelloController(
         val greetingMessage = if (name.isNotBlank()) {
             val greeting = greetingService.create(
                 name = name,
-                requestType = RequestType.WEB,
+                endpoint = Endpoint.WEB,
                 user = user
             )
             "${greeting.timeOfDay.message}, $name!"
@@ -84,7 +84,7 @@ class HelloApiController(
 
         val greeting = greetingService.create(
             name = name,
-            requestType = RequestType.API,
+            endpoint = Endpoint.API,
             user = user
         )
 
@@ -112,7 +112,7 @@ class HelloApiController(
         return greetings.map { greeting ->
             GreetingHistoryResponse(
                 message = "${greeting.timeOfDay.message}, ${greeting.name}!",
-                from = greeting.requestType.name,
+                endpoint = greeting.endpoint.name,
                 timestamp = greeting.timestamp.toString()
             )
         }

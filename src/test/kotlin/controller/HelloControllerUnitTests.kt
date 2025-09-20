@@ -30,10 +30,10 @@ class HelloControllerUnitTests {
 
         whenever(greetingServiceMock.create(any(), any(), any())).thenAnswer { invocation ->
             val name = invocation.getArgument<String>(0)
-            val requestType = invocation.getArgument<RequestType>(1)
+            val endpoint = invocation.getArgument<Endpoint>(1)
             val user = invocation.getArgument<User>(2)
 
-            Greeting(name = name, requestType = requestType, user = user)
+            Greeting(name = name, endpoint = endpoint, user = user)
         }
 
         controller = HelloController(

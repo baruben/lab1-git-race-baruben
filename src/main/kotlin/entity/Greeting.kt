@@ -1,6 +1,6 @@
 package es.unizar.webeng.hello.entity 
 
-import es.unizar.webeng.hello.enum.RequestType
+import es.unizar.webeng.hello.enum.Endpoint
 import es.unizar.webeng.hello.enum.TimeOfDay
 import es.unizar.webeng.hello.enum.timestampToTimeOfDay
 import jakarta.persistence.*
@@ -10,7 +10,7 @@ import java.time.OffsetDateTime
 @Table(name = "GREETINGS")
 class Greeting(
     @Enumerated(EnumType.STRING)
-    val requestType: RequestType,
+    val endpoint: Endpoint,
 
     @ManyToOne
     @JoinColumn(name = "user_id")

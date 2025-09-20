@@ -2,16 +2,16 @@ package es.unizar.webeng.hello.service
 
 import es.unizar.webeng.hello.entity.Greeting
 import es.unizar.webeng.hello.entity.User
-import es.unizar.webeng.hello.enum.RequestType
+import es.unizar.webeng.hello.enum.Endpoint
 import es.unizar.webeng.hello.repository.GreetingRepository
 import org.springframework.stereotype.Service
 
 @Service
 class GreetingService(private val greetingRepository: GreetingRepository) {
-    fun create(name: String, requestType: RequestType, user: User): Greeting {
+    fun create(name: String, endpoint: Endpoint, user: User): Greeting {
         val greeting = Greeting(
             name = name,
-            requestType = requestType,
+            endpoint = endpoint,
             user = user
         )
         return greetingRepository.save(greeting)

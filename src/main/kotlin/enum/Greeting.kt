@@ -2,7 +2,7 @@ package es.unizar.webeng.hello.enum
 
 import java.time.OffsetDateTime
 
-enum class RequestType { WEB, API }
+enum class Endpoint { WEB, API }
 
 enum class TimeOfDay(val message: String) { 
     MORNING("Good Morning"), 

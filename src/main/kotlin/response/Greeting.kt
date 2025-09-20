@@ -7,6 +7,6 @@ data class GreetingResponse(
 
 data class GreetingHistoryResponse(
     val message: String,
-    val from: String,
+    val endpoint: String,
     val timestamp: String
 )

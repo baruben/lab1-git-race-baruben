@@ -20,10 +20,22 @@
                 Modern Web App
             </a>
             <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="/api/history" sec:authorize="isAuthenticated()">History</a>
                 <a class="nav-link" href="/api/hello">Hello</a>
-                <a class="nav-link" href="/api/whoami">Who am i?</a>
+
+                <div sec:authorize="isAuthenticated()" class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="statsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Statistics
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark bg-primary" aria-labelledby="statsDropdown">
+                        <li><a class="dropdown-item" href="/api/statistics">Global Statistics</a></li>
+                        <li><a class="dropdown-item" href="/api/myStatistics">My Statistics</a></li>
+                        <li><a class="dropdown-item" href="/api/history">History</a></li>
+                    </ul>
+                </div>
+                <a class="nav-link" href="/api/statistics" sec:authorize="isAnonymous()">Statistics</a>
+                
                 <a class="nav-link" href="/actuator/health" target="_blank">Health</a>
+                <a class="nav-link" href="/api/whoami">Who am i?</a>
                 <a class="nav-link" href="/swagger-ui/index.html">API</a>
             </div>
 

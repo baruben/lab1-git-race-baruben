@@ -41,7 +41,7 @@ class HelloControllerDBTests {
         assertThat(greetings).hasSize(1)
         val savedGreeting = greetings.first()
 
-        assertThat(savedGreeting.requestType).isEqualTo(RequestType.WEB)
+        assertThat(savedGreeting.endpoint).isEqualTo(Endpoint.WEB)
         assertThat(savedGreeting.name).isEqualTo("Test")
         assertThat(savedGreeting.user.role).isEqualTo(Role.GUEST)
         assertThat(savedGreeting.timestamp).isInstanceOf(OffsetDateTime::class.java)
@@ -55,7 +55,7 @@ class HelloControllerDBTests {
         assertThat(greetings).hasSize(1)
         val savedGreeting = greetings.first()
 
-        assertThat(savedGreeting.requestType).isEqualTo(RequestType.API)
+        assertThat(savedGreeting.endpoint).isEqualTo(Endpoint.API)
         assertThat(savedGreeting.name).isEqualTo("Test")
         assertThat(savedGreeting.user.role).isEqualTo(Role.GUEST)
         assertThat(savedGreeting.timestamp).isInstanceOf(OffsetDateTime::class.java)

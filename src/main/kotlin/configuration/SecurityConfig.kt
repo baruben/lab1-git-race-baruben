@@ -57,9 +57,9 @@ class SecurityConfig(
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .authorizeHttpRequests {
-                it.requestMatchers("/", "/signup", "/login", "/api/whoami", "/api/hello", "/actuator/health",
+                it.requestMatchers("/", "/signup", "/login", "/api/whoami", "/api/hello", "/api/statistics", 
                     "/css/**", "/js/**", "/images/**", "/assets/**", "/webjars/**", "/vendor/**", 
-                    "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**")
+                    "/actuator/health", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**")
                     .permitAll()
                 it.anyRequest().hasRole("USER")
             }
