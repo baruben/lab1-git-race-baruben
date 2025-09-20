@@ -50,7 +50,8 @@ interface GreetingRepository : JpaRepository<Greeting, Long> {
 
     @Query("""SELECT FUNCTION('HOUR', g.timestamp), COUNT(g) 
             FROM Greeting g 
-            GROUP BY FUNCTION('HOUR', g.timestamp)""")
+            GROUP BY FUNCTION('HOUR', g.timestamp)
+            ORDER BY COUNT(g) DESC""")
     fun countPerHour(pageable: Pageable): List<Pair<Int, Long>>
 
     @Query("""SELECT UPPER(g.name), COUNT(g) 
@@ -103,7 +104,8 @@ interface GreetingRepository : JpaRepository<Greeting, Long> {
     @Query("""SELECT FUNCTION('HOUR', g.timestamp), COUNT(g) 
             FROM Greeting g 
             WHERE g.user = :user
-            GROUP BY FUNCTION('HOUR', g.timestamp)""")
+            GROUP BY FUNCTION('HOUR', g.timestamp)
+            ORDER BY COUNT(g) DESC""")
     fun countPerHourByUser(@Param("user") user: User, pageable: Pageable): List<Pair<Int, Long>>
 
     @Query("""SELECT UPPER(g.name), COUNT(g) 

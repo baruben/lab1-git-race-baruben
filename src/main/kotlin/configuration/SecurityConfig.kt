@@ -23,7 +23,7 @@ class SecurityConfig(
     private val securityUserService: SecurityUserService,
     private val tokenRepository: TokenRepository,
     private val rateLimitFilter: RateLimitFilter,
-    @Value("\${security.rememberme.key}") private val rememberMeKey: String
+    @param:Value("\${security.rememberme.key}") private val rememberMeKey: String
 ) {
 
     @Bean

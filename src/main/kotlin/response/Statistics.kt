@@ -26,14 +26,14 @@ data class RankingEndpoint(
 )
 
 data class RankingTimeOfDay(
-    val endpoint: String,
+    val timeOfDay: String,
     val count: Long
 )
 
 data class StatisticsResponse(
     val totalGreetings: Long,
     val rankingEndpoints: List<RankingEndpoint>,
-    val rankingRole: List<RankingRole>,
+    val rankingRoles: List<RankingRole>,
     val rankingTimesOfDay: List<RankingTimeOfDay>,
     val topDates: List<TopDates>,
     val topHours: List<TopHours>,

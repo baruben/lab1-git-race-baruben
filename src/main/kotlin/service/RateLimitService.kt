@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 @Service
 class RateLimitService(
-    @Value("\${ratelimit.capacity}") private val capacity: Long
+    @param:Value("\${ratelimit.capacity}") private val capacity: Long
 ) {
     private val buckets: ConcurrentHashMap<String, Bucket> = ConcurrentHashMap()
 
