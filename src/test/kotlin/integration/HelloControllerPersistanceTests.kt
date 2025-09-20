@@ -19,7 +19,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @TestPropertySource("classpath:application-test.properties")
-class HelloControllerDBTests {
+class HelloControllerPersistanceTests {
     @LocalServerPort
     private var port: Int = 0
 

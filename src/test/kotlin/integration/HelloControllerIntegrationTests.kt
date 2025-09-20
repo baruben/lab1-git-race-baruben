@@ -1,7 +1,8 @@
-package es.unizar.webeng.hello
+package es.unizar.webeng.hello.controller
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import es.unizar.webeng.hello.enum.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
@@ -11,11 +12,12 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.context.TestPropertySource
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import java.time.OffsetDateTime
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @TestPropertySource("classpath:application-test.properties")
-class IntegrationTest {
+class HelloControllerIntegrationTests {
     @LocalServerPort
     private var port: Int = 0
 
@@ -35,17 +37,16 @@ class IntegrationTest {
 
     @Test
     fun `should return personalized greeting when name is provided`() {
+        val timeOfDay = timestampToTimeOfDay(OffsetDateTime.now())
         val response = restTemplate.getForEntity("http://localhost:$port?name=Developer", String::class.java)
         
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        
-        val greetings = listOf("Good Morning", "Good Afternoon", "Good Night")
-        assertThat(greetings.any { response.body!!.contains(it) }).isTrue()
-        assertThat(response.body).contains("Developer")
+        assertThat(response.body).contains("${timeOfDay.message}, Developer!")
     }
 
     @Test
     fun `should return API response with timestamp`() {
+        val timeOfDay = timestampToTimeOfDay(OffsetDateTime.now())
         val response = restTemplate.getForEntity("http://localhost:$port/api/hello?name=Test", String::class.java)
         
         println("HTTP status: ${response.statusCode}")
@@ -54,7 +55,7 @@ class IntegrationTest {
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.CREATED)
         assertThat(response.headers.contentType).isEqualTo(MediaType.APPLICATION_JSON)
-        assertThat(response.body).matches(".*(Good Morning|Good Afternoon|Good Night), Test!.*")
+        assertThat(response.body).contains("${timeOfDay.message}, Test!")
         assertThat(response.body).contains("timestamp")
     }
 
