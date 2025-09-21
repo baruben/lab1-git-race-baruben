@@ -23,16 +23,10 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 
 
-/**
- * Controller for handling the homepage and greeting users.
- *
- * Displays a personalized greeting if a name is provided, otherwise
- * shows a default message from application properties.
- *
- * @property message Default message to show when no name is provided.
- * @property greetingService Service to create and manage greetings.
- * @property userService Service to fetch the current session user.
- */
+@Tag(
+    name = "Web",
+    description = "Endpoints for web pages."
+)
 @Controller
 class HelloController(
     @param:Value("\${app.message:Hello World}") 
@@ -41,20 +35,25 @@ class HelloController(
     private val userService: UserService
 ) {
 
-    /**
-     * GET endpoint for the homepage.
-     *
-     * - If `name` is provided: creates a [Greeting] for the current user,
-     *   and displays a time-of-day-based personalized message.
-     * - If `name` is empty: displays the default message from `message`.
-     *
-     * @param model Spring MVC [Model] to pass attributes to the view.
-     * @param name Optional name parameter for personalized greeting.
-     * @return View name "welcome".
-     */
+    @Operation(
+        summary = "Homepage",
+        description = "Displays a personalized greeting if 'name' is provided, otherwise shows the default message",
+        responses = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Homepage rendered successfully",
+                content = [Content(mediaType = "text/html")]
+            )
+        ]
+    )
     @GetMapping("/")
     fun welcome(
         model: Model,
+        @Parameter(
+            name = "name",
+            description = "Optional name to personalize the greeting",
+            required = false
+        )
         @RequestParam(defaultValue = "") name: String
     ): String {
         val user = userService.getSessionUser()
@@ -95,7 +94,7 @@ class HelloApiController(
     @ResponseStatus(HttpStatus.CREATED)
     fun helloApi(
         @Parameter(
-            description = "Name of the person to greet (defaults to 'World')",
+            description = "Name to personalize the greeting (defaults to 'World')",
             example = "Alice"
         )
         @RequestParam(defaultValue = "World") name: String): GreetingResponse {

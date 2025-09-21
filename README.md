@@ -16,13 +16,110 @@ A modern Spring Boot application built with Kotlin, featuring a responsive web i
 
 ## 🛠️ Technology Stack
 
-- **Backend**: Spring Boot 3.5.3
-- **Language**: Kotlin 2.2.10
-- **Java Version**: 21 LTS
-- **Frontend**: Bootstrap 5.3.3, Thymeleaf
-- **Build Tool**: Gradle 9.0.0
-- **Testing**: JUnit 5, AssertJ, MockMvc
-- **Containerization**: Docker
+---
+
+### Backend
+
+#### **Spring Boot 3.5.3**
+- A powerful framework for building Java-based web applications and microservices.
+- Provides production-ready features like embedded servers, metrics, and security.
+- Offers auto-configuration to minimize boilerplate code.
+- Integrates seamlessly with databases, messaging queues, and cloud services.
+
+---
+
+### Language
+
+#### **Kotlin 2.2.10**
+- A modern, concise, and expressive programming language for the JVM.
+- Fully interoperable with Java, allowing gradual adoption in Java projects.
+- Offers features like null safety, coroutines, and extension functions.
+- Reduces boilerplate compared to Java, increasing developer productivity.
+
+---
+
+### Java Platform
+
+#### **Java 21 LTS (Long-Term Support)**
+- The latest long-term support release of Java.
+- Brings performance improvements and new language features (e.g., pattern matching, record patterns, virtual threads).
+- Ensures long-term stability and security updates for enterprise applications.
+
+---
+
+### Frontend
+
+#### **Bootstrap 5.3.3**
+- A popular CSS framework for responsive, mobile-first frontends.
+- Provides ready-to-use components like buttons, modals, and grids.
+- Eliminates the need to write extensive custom CSS for common UI patterns.
+
+#### **Thymeleaf**
+- A server-side Java template engine for rendering HTML.
+- Integrates seamlessly with Spring Boot for dynamic page generation.
+- Allows embedding logic directly in HTML templates using natural syntax.
+- Great for building MVC applications with server-rendered views.
+
+---
+
+### Build Tool
+
+#### **Gradle 9.0.0**
+- A modern build automation tool for Java, Kotlin, and other languages.
+- Uses a **Groovy** or **Kotlin DSL** for build configuration.
+- Offers high performance with incremental builds and build caching.
+- Widely supported in the Spring Boot ecosystem.
+
+---
+
+### Testing
+
+#### **JUnit 5**
+- The standard testing framework for Java and Kotlin.
+- Provides annotations like `@Test`, `@BeforeEach`, and `@AfterEach` for structured testing.
+- Supports parameterized tests and extensions for advanced use cases.
+
+#### **AssertJ**
+- A fluent assertion library for Java/Kotlin tests.
+- Offers human-readable assertions like  
+  ```java
+  assertThat(actual).isEqualTo(expected);
+- Improves test readability and debugging compared to plain JUnit assertions.
+
+#### **MockMvc**
+- A Spring testing utility for simulating HTTP requests and responses.
+- Enables testing of Spring MVC controllers without starting a full server.
+- Useful for verifying API endpoints and ensuring correct request/response behavior.
+
+---
+
+### Added technologies
+#### **Spring Security**
+- A powerful and customizable security framework for Spring applications.  
+- Provides authentication, authorization, CSRF protection, and session management.  
+- Integrates seamlessly with Spring Boot, reducing boilerplate when implementing security features.
+
+#### BCrypt 
+- A password-hashing function designed for secure storage of credentials.  
+- Resistant to brute-force attacks due to its adaptive complexity factor ("work factor").  
+- Widely used as a best practice for storing user passwords.
+
+#### Bucket4j 
+- A Java library for **rate limiting** based on the token-bucket algorithm.  
+- Prevents abuse of APIs by controlling the number of requests per user or client over time.  
+- Flexible, with support for distributed environments (e.g., via Redis, Hazelcast).
+
+#### Swagger / OpenAPI 
+- A specification and toolset for designing, building, and documenting REST APIs.  
+- Generates interactive API documentation (Swagger UI), allowing developers to test endpoints directly.  
+- Widely adopted, making APIs easier to understand and consume.
+
+#### Mockito 
+- A mocking framework for unit testing in Java.  
+- Allows developers to create mock objects to simulate dependencies.  
+- Makes it easier to test components in isolation without relying on real implementations.
+
+---
 
 ## 📋 Prerequisites
 
@@ -89,13 +186,8 @@ Run specific test classes:
 
 ## 📡 API Endpoints
 
-### Web Endpoints
-- `GET /` - Main web page with interactive HTTP debugging tools
-- `GET /?name={name}` - Personalized greeting page
-
-### REST API Endpoints
-- `GET /api/hello` - Returns JSON greeting with timestamp
-- `GET /api/hello?name={name}` - Returns personalized JSON greeting
+### Web Endpoints & REST API Endpoints
+- Documented with Swagger/OpenAPI in the endpoint /swagger-ui/index.html
 
 ### Monitoring Endpoints
 - `GET /actuator/health` - Application health status
@@ -114,22 +206,48 @@ Run specific test classes:
 src/
 ├── main/
 │   ├── kotlin/
-│   │   ├── controller/
-│   │   │   └── HelloController.kt      # Web and API controllers
+│   │   ├── configuration/              # OpenApi and Security configurations
+│   │   │   └── ...      
+│   │   ├── controller/                 # Web and API controllers
+│   │   │   └── ...  
+│   │   ├── entity/                     # Domain entities
+│   │   │   └── ...  
+│   │   ├── enum/                       # Enum data classes
+│   │   │   └── ...  
+│   │   ├── filter/                     # Rate limit filter
+│   │   │   └── ...  
+│   │   ├── repository/                 # Repositories for data persistence
+│   │   │   └── ...  
+│   │   ├── response/                   # API responses data classes
+│   │   │   └── ...  
+│   │   ├── service/                    # Domain services for using repositories
+│   │   │   └── ...  
 │   │   └── HelloWorld.kt               # Main application class
 │   └── resources/
 │       ├── application.properties      # Application configuration
-│       ├── templates/
-│       │   └── welcome.html           # Thymeleaf template
+│       ├── templates/                  # Thymeleaf templates
+│       │   ├── login.html
+│       │   ├── signup.html
+│       │   └── welcome.html           
 │       └── public/
 │           └── assets/
-│               └── logo.svg           # Application logo
+│               └── logo.svg            # Application logo
 └── test/
     └── kotlin/
-        ├── controller/
-        │   ├── HelloControllerUnitTests.kt    # Unit tests
-        │   └── HelloControllerMVCTests.kt     # MVC tests
-        └── IntegrationTest.kt                 # Integration tests
+        ├── integration/                # Integration tests
+        │   └── ...
+        ├── slice/                      # Slice tests
+        │   ├── controller/             # MVC tests
+        │   │   └── ...
+        │   └── repository/             # JPA tests
+        │       └── ...
+        └── unit/                       # Unit tests
+            ├── controller/                    
+            │   └── ...
+            ├── entity/                    
+            │   └── ...
+            └── service/                    
+                └── ...
 ```
 
 ## ⚙️ Configuration
@@ -158,22 +276,6 @@ The application includes a development-focused Docker setup:
 - **Volume Mounting**: Source code changes are immediately reflected in the container
 - **Health Checks**: Built-in health monitoring via Spring Boot Actuator
 - **Development Tools**: Includes wget for health checks and debugging utilities
-
-## 🔧 Development
-
-### Adding New Features
-
-1. **Controllers**: Add new endpoints in the controller package
-2. **Templates**: Add new Thymeleaf templates in `src/main/resources/templates/`
-3. **Tests**: Add corresponding tests in the test package
-4. **Configuration**: Update `application.properties` for new settings
-
-### Code Style
-
-- Use modern Kotlin features (constructor injection, data classes)
-- Follow Spring Boot best practices
-- Write comprehensive tests for all functionality
-- Use descriptive test method names with backticks
 
 ## 📊 Monitoring
 
