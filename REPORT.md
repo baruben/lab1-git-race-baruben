@@ -168,6 +168,8 @@ and backend separation.
   Assistance was received in writing HTML and Thymeleaf templates, as frontend development is not my strongest area.  
 - **Testing**:  
   Since I have not studied testing in depth, AI was used to help design and implement tests beyond basic unit tests (for example, MockMvc tests, integration tests).  
+- **Debugging**:
+  Finally, for complex errors originated by the technologies used, for example Spring Security, AI was consulted for ways to fix them.
 
 **Estimated Contribution:** ~50% AI-assisted  
 **Modifications Made:** All AI-generated content was reviewed and adapted first, before integrating it into the project according to the project's needs.  
