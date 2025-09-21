@@ -22,6 +22,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 
+
+/**
+ * Controller for handling the homepage and greeting users.
+ *
+ * Displays a personalized greeting if a name is provided, otherwise
+ * shows a default message from application properties.
+ *
+ * @property message Default message to show when no name is provided.
+ * @property greetingService Service to create and manage greetings.
+ * @property userService Service to fetch the current session user.
+ */
 @Controller
 class HelloController(
     @param:Value("\${app.message:Hello World}") 
@@ -30,6 +41,17 @@ class HelloController(
     private val userService: UserService
 ) {
 
+    /**
+     * GET endpoint for the homepage.
+     *
+     * - If `name` is provided: creates a [Greeting] for the current user,
+     *   and displays a time-of-day-based personalized message.
+     * - If `name` is empty: displays the default message from `message`.
+     *
+     * @param model Spring MVC [Model] to pass attributes to the view.
+     * @param name Optional name parameter for personalized greeting.
+     * @return View name "welcome".
+     */
     @GetMapping("/")
     fun welcome(
         model: Model,

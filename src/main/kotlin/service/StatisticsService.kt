@@ -7,12 +7,27 @@ import org.springframework.stereotype.Service
 import org.springframework.data.domain.PageRequest
 import org.springframework.beans.factory.annotation.Value
 
+
+/**
+ * Service layer for generating greeting statistics for all users or a specific user.
+ *
+ * Computes totals, rankings, and top items such as endpoints, roles, times of day, dates,
+ * hours, and names.
+ *
+ * @property greetingRepository Repository for querying greeting data.
+ * @property limit Maximum number of top items to return (default 3, configurable via `top.limit`).
+ */
 @Service
 class StatisticsService(
     private val greetingRepository: GreetingRepository,
     @param:Value("\${top.limit:3}") private val limit: Int
 ) {
 
+    /**
+     * Generates statistics across all greetings in the system.
+     *
+     * @return [StatisticsResponse] containing overall counts and rankings.
+     */
     fun getStatistics(): StatisticsResponse {
         val totalGreetings = greetingRepository.count()
 
@@ -48,6 +63,12 @@ class StatisticsService(
         )
     }
 
+    /**
+     * Generates statistics only for a specific [User].
+     *
+     * @param user The [User] for whom the statistics are generated.
+     * @return [MyStatisticsResponse] containing counts and rankings filtered by the user.
+     */
     fun getMyStatistics(user: User): MyStatisticsResponse {
         val totalGreetings = greetingRepository.countByUser(user)
 

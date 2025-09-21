@@ -1,7 +1,6 @@
 package es.unizar.webeng.hello.response
 
 
-
 /**
  * Represents the response of the API endpoint that sends a greeting message.
  *
@@ -13,6 +12,7 @@ data class GreetingResponse(
     val message: String,
     val timestamp: String
 )
+
 
 /**
  * Represents the response of the API endpoint that lists a user's history
