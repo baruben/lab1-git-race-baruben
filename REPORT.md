@@ -82,40 +82,35 @@ New REST API endpoints were introduced to support the latest features:
 
 ---
 
-## Technology Stack 
 
 ## Technical Decisions
 
----
-
-#### **Spring Security** 
+### Spring Security 
 Initially, authentication was designed using **JWT tokens**. However, since the project uses **Spring Boot + Thymeleaf**, which are server-side heavy (all views are served by server controllers), it was decided to use the already implemented authentication technology provided by **Spring Security** instead of maintaining a custom JWT solution.
 
 ---
 
-#### BCrypt
+### BCrypt
 Spring Security requires a password encoder for hashing and verifying passwords. Since **BCrypt** had been successfully used in past Java projects, it was chosen again for this application to ensure secure and familiar password handling.
 
 ---
 
-#### Bucket4j 
+### Bucket4j
 After reviewing documentation on rate limiting, it was decided to use **Bucket4j** instead of implementing a custom bucket system from scratch. This reduced development effort while ensuring a reliable and proven solution.
 
 ---
 
-#### Swagger / OpenAPI
+### Swagger / OpenAPI
 Since **Swagger/OpenAPI** had already been used successfully in past projects, the same technology was adopted again to document the API. This ensured consistency, familiarity, and reduced onboarding time for developers.
 
 ---
 
-#### Mockito
+### Mockito
 Mockito was chosen for mocking dependencies in tests to keep the test suite fast, isolated, and maintainable. Its wide adoption and strong integration with **JUnit 5** made it the natural choice for this project.
 
 ---
 
 ## Learning Outcomes
-
----
 
 ### Kotlin & Spring Boot Architectural Layers
 - Applied for the first time **Kotlin** (a new technology) in a project.  
@@ -171,7 +166,7 @@ and backend separation.
 - **Debugging**:
   Finally, for complex errors originated by the technologies used, for example Spring Security, AI was consulted for ways to fix them.
 
-**Estimated Contribution:** ~50% AI-assisted  
+**Estimated Contribution:** ~45% AI-assisted  
 **Modifications Made:** All AI-generated content was reviewed and adapted first, before integrating it into the project according to the project's needs.  
 
 ---
